@@ -1,0 +1,97 @@
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 700;
+    font-style: normal;
+	font-display: swap;
+	src: local('Pretendard Bold'), url(../fonts/Pretendard-Bold.woff2) format('woff2'), url(../fonts/Pretendard-Bold.woff) format('woff');
+}
+
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 400;
+    font-style: normal;
+	font-display: swap;
+	src: local('Pretendard Regular'), url(../fonts/Pretendard-Regular.woff2) format('woff2'), url(../fonts/Pretendard-Regular.woff) format('woff');
+}
+
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 100;
+    font-style: normal;
+	font-display: swap;
+	src: local('Pretendard Thin'), url(../fonts/Pretendard-Thin.woff2) format('woff2'), url(../fonts/Pretendard-Thin.woff) format('woff');
+}
+
+/* 1. 모든 요소의 기본 여백 제거 + box-sizing 설정 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 2. 문서 기본 글꼴 설정 + 폰트 크기/굵기 고정 */
+body {
+    font-family: 'Pretendard', sans-serif; /* 원하는 폰트로 수정 가능 */
+    font-size: 16px;       /* 고정된 기본 폰트 크기 */
+    font-weight: 400;      /* 고정된 기본 글자 굵기 */
+    line-height: 1.6;
+    background-color: #fff;
+    color: #111;
+}
+
+.bold, .title {
+    font-weight: 700;
+}
+
+.thin, .desc {
+    font-weight: 100;
+}
+
+/* 3. 리스트 마커 제거 */
+ul,
+ol {
+    list-style: none;
+}
+
+/* 4. 기본 링크 스타일 제거 */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 5. 이미지와 비디오 반응형 */
+img,
+video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* 6. 기본 버튼 스타일 초기화 */
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+/* 7. 폼 요소 기본 스타일 정리 */
+input,
+textarea,
+select {
+    font: inherit;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+/* 8. HTML5 시맨틱 태그를 블록으로 지정 */
+article,
+aside,
+footer,
+header,
+nav,
+section,
+main {
+    display: block;
+}
