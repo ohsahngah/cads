@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CADS - Cryptocurrency Accumulation Decision System</title>
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="navigation">
+        <div class="main">
+            <div class="container">
+                <div class="start">
+                    <div class="logo">CADS</div>
+
+                    <div class="desc">
+                        Cryptocurrency Accumulation Decision System
+                    </div>
+                </div>
+
+                <div class="end">
+                    <ul class="main-tabs">
+                        <li data-tab="news">참고</li>
+                        <li data-tab="history">실행</li>
+                        <li class="active" data-tab="dashboard">분석</li>
+
+                        <li class="main-tab-settings" data-open-modal="settings-all">
+                            <span class="action-icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
+                                    <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
+                                </svg>
+                            </span>
+                            <span>설정</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="sub">
+            <div class="container">
+                <div class="start">
+                    <div class="top-action" title="추천행동">
+                        <span id="actionText">실행</span>
+                    </div>
+                </div>
+
+                <div class="end">
+                    <ul class="sub-actions active" data-submenu="dashboard">
+                        <li id="addBurnTopBtn">
+                            <span class="action-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M5 12H19" />
+                                </svg>
+                            </span>
+                            <span>소각</span>
+                        </li>
+
+                        <li id="addRewardTopBtn">
+                            <span class="action-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 5V19" />
+                                    <path d="M5 12H19" />
+                                </svg>
+                            </span>
+                            <span>보상</span>
+                        </li>
+                    </ul>
+
+                    <ul class="sub-actions" data-submenu="history">
+                        <li data-open-modal="buy-record">
+                            <span class="action-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 5V19" />
+                                    <path d="M5 12H19" />
+                                </svg>
+                            </span>
+                            <span>암호화폐</span>
+                        </li>
+                    </ul>
+
+                    <ul class="sub-actions" data-submenu="news">
+                        <li id="addNewsTopBtn">
+                            <span class="action-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 5V19" />
+                                    <path d="M5 12H19" />
+                                </svg>
+                            </span>
+                            <span>참고자료</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <!-- 의사결정에 도움되는 카드 -->
+        <div class="tab active" id="dashboard">
+            <div class="container">
+                <div class="dashboard-empty" id="dashboardEmpty">
+                    <div class="dashboard-empty-card">
+                        <div class="dashboard-empty-title">처음 방문하셨거나 데이터를 초기화 하셨군요!</div>
+                        <div class="dashboard-empty-desc">아래 버튼을 눌러 투자 기준을 먼저 설정해 주세요.</div>
+                        <button type="button" class="modal-button primary" id="openRewardTargetFromEmpty">
+                            설정 열기
+                        </button>
+                    </div>
+                </div>
+
+
+                <ul class="summary-cards compact" id="summaryCards">
+
+                    <li class="summary-card" data-type="profit">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">예상 손익 금액<span class="thin">(원)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="profitAmount">0.00</div>
+                        <div class="summary-card-desc">수수료 차감 후, 평가 금액 - 누적 매수 금액</div>
+                    </li>
+
+                    <li class="summary-card" data-type="rate">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">수익률<span class="thin">(%)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="profitRate">0.00%</div>
+                        <div class="summary-card-desc">예상 손익 금액 / 누적 매수 금액</div>
+                    </li>
+
+                    <li class="summary-card" data-type="avg">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">평균 매수 단가<span class="thin">(원)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="avgPrice">0.00</div>
+                        <div class="summary-card-desc">보상 포함 적용 중</div>
+                    </li>
+
+                    <li class="summary-card" data-type="price">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">현재 단가<span class="thin">(원)</span></span>
+                            <button id="refreshPriceCardBtn" class="card-refresh-btn" title="현재 단가 갱신">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M20 12A8 8 0 1 1 17.2 5.9" />
+                                    <path d="M20 4V10H14" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="summary-card-value" id="currentPrice">0.00</div>
+                        <div class="summary-card-desc" id="apiStatusText">아직 현재가를 갱신하지 않았습니다</div>
+                    </li>
+
+
+                    <li class="summary-card" data-type="cost">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">누적 매수 금액<span class="thin">(원)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="totalCost">0.00</div>
+                        <div class="summary-card-desc">전체 매수 금액 합계</div>
+                    </li>
+
+                    <li class="summary-card" data-type="value">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">현재 평가 금액<span class="thin">(원)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="grossValue">0.00</div>
+                        <div class="summary-card-desc">실 보유 수량 × 현재 단가</div>
+                    </li>
+
+                    <li class="summary-card" data-type="net">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">수수료 차감 후, 평가 금액<span class="thin">(원)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="netValue">0.00</div>
+                        <div class="summary-card-desc">현재 평가 금액 - 거래 수수료(업비트) - 출금 수수료</div>
+                    </li>
+
+                    <li class="summary-card" data-type="actual">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">세금 차감 후, 실 수령액<span class="thin">(원)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="actualProfit">0.00</div>
+                        <div class="summary-card-desc">수수료 차감 후, 평가 금액 - 세금</div>
+                    </li>
+
+
+                    <li class="summary-card" data-type="remain">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">목표까지 필요한 수량<span class="thin">(개)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="remainQty">0.00</div>
+                        <div class="summary-card-desc">
+                            목표 수량: <span id="targetQtyInRemain">0.00</span>(개)
+                        </div>
+                    </li>
+
+                    <li class="summary-card" data-type="total">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">누적 매집 수량<span class="thin">(개)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="totalQty">0.00</div>
+                        <div class="summary-card-desc">거래소에서 직접 매수한 수량</div>
+                    </li>
+
+                    <li class="summary-card" data-type="reward">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">누적 보상 수량<span class="thin">(개)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="rewardQty">0.00</div>
+                        <div class="summary-card-desc">에어드롭 & 스테이킹 보상 수량</div>
+                    </li>
+
+                    <li class="summary-card" data-type="holding">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">실 보유 수량<span class="thin">(개)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="actualQty">0.00</div>
+                        <div class="summary-card-desc">누적 매집 수량 + 누적 보상 수량 - 누적 소각 수량</div>
+                    </li>
+
+
+                    <li class="summary-card" data-type="start">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">투자 시작일<span class="thin">(년-월-일)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="startDate">-</div>
+                        <div class="summary-card-desc">첫 매수 거래 기준</div>
+                    </li>
+
+                    <li class="summary-card" data-type="days">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">총 투자일 수<span class="thin">(일)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="investDays">0일</div>
+                        <div class="summary-card-desc">오늘 포함</div>
+                    </li>
+
+                    <li class="summary-card" data-type="fee">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">누적 거래 수수료<span class="thin">(원)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="estimatedFee">0.00</div>
+                        <div class="summary-card-desc" id="feeRateSub">매수 + 매도 수수료율</div>
+                    </li>
+
+                    <li class="summary-card" data-type="progress">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">목표 달성률<span class="thin">(%)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="progressRate">0.00%</div>
+                        <div class="summary-card-desc" id="targetQtySub">목표 수량: 0.00</div>
+                    </li>
+
+                    <li class="summary-card" data-type="taxbase">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">세금 대상 금액<span class="thin">(원)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="taxBase">0.00</div>
+                        <div class="summary-card-desc">수수료 차감 후, 평가 금액 기준: <span id="taxDeductionSub">0.00</span>(원)</div>
+                    </li>
+
+                    <li class="summary-card" data-type="tax">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">세금<span class="thin">(원)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="taxAmount">0.00</div>
+                        <div class="summary-card-desc" id="taxRateSub">세금 대상 금액 기준: 세율 0.00%</div>
+                    </li>
+
+                    <li class="summary-card" data-type="withdraw">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">출금 수수료<span class="thin">(원)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="withdrawFee">0.00</div>
+                        <div class="summary-card-desc">업비트 > 케이뱅크 출금 수수료</div>
+                    </li>
+
+                    <li class="summary-card" data-type="required">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">목표까지 필요한 금액<span class="thin">(원)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="requiredAmount">0.00</div>
+                        <div class="summary-card-desc">목표까지 필요한 수량 × 현재 단가</div>
+                    </li>
+
+                    <li class="summary-card" data-type="required-fee">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">수수료 포함, 목표까지 필요한 금액<span class="thin">(원)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="requiredAmountWithFee">0.00</div>
+                        <div class="summary-card-desc" id="requiredAmountWithFeeSub">
+                            현재 단가 × 목표까지 남은 수량 + 거래 수수료
+                        </div>
+                    </li>
+
+                    <li class="summary-card" data-type="reward-daily-simple">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">단리적 일 보상 수량<span class="thin">(개)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="dailyRewardSimple">0.00</div>
+                        <div class="summary-card-desc">누적 매집 수량 기준</div>
+                    </li>
+
+                    <li class="summary-card" data-type="reward-daily-compound">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">복리적 일 보상 수량<span class="thin">(개)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="dailyRewardCompound">0.00</div>
+                        <div class="summary-card-desc">실 보유 수량 기준</div>
+                    </li>
+
+                    <li class="summary-card" data-type="burn">
+                        <div class="summary-card-top">
+                            <span class="summary-card-icon"></span>
+                            <span class="summary-card-label">누적 소각 수량<span class="thin">(개)</span></span>
+                        </div>
+                        <div class="summary-card-value" id="burnQty">0.00</div>
+                        <div class="summary-card-desc" id="burnQtySub">기본 전송소각 수량: 0.00(개)</div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab" id="history">
+            <div class="container">
+                <div class="history-panel">
+                    <div class="history-table-wrap">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-date">
+                                        <button type="button" class="sort-button" data-sort="date">
+                                            일자
+                                            <span class="sort-arrows">
+                                                <span>▲</span>
+                                                <span>▼</span>
+                                            </span>
+                                        </button>
+                                    </th>
+                                    <th class="col-qty">
+                                        <button type="button" class="sort-button" data-sort="quantity">
+                                            수량<span class="thin">(개)</span>
+                                            <span class="sort-arrows">
+                                                <span>▲</span>
+                                                <span>▼</span>
+                                            </span>
+                                        </button>
+                                    </th>
+                                    <th class="col-price">
+                                        <button type="button" class="sort-button" data-sort="price">
+                                            단가<span class="thin">(원)</span>
+                                            <span class="sort-arrows">
+                                                <span>▲</span>
+                                                <span>▼</span>
+                                            </span>
+                                        </button>
+                                    </th>
+                                    <th class="col-total">
+                                        <button type="button" class="sort-button" data-sort="total">
+                                            금액<span class="thin">(원)</span>
+                                            <span class="sort-arrows">
+                                                <span>▲</span>
+                                                <span>▼</span>
+                                            </span>
+                                        </button>
+                                    </th>
+                                    <th class="col-memo">메모</th>
+                                    <th class="col-action">삭제</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <!-- JS 렌더링 -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="history-pagination">
+                        <div class="history-page-info" id="historyPageInfo">1 / 1</div>
+
+
+                        <div class="history-page-buttons">
+                            <select id="pageSizeSelect">
+                                <option value="10" selected>10개</option>
+                                <option value="20">20개</option>
+                                <option value="50">50개</option>
+                            </select>
+
+                            <button type="button" class="page-button" id="firstPageButton">처음</button>
+                            <button type="button" class="page-button" id="prevPageButton">이전</button>
+
+                            <div class="page-numbers" id="pageNumbers">
+                                <!-- JS 렌더링 -->
+                            </div>
+
+                            <button type="button" class="page-button" id="nextPageButton">다음</button>
+                            <button type="button" class="page-button" id="lastPageButton">마지막</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab" id="news">
+            <div class="container">
+                <div class="news-list" id="newsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-text">
+                © 2026 CADS · 암호화폐 분할 매집 투자 의사결정 시스템 · by OSA
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal-root" id="modalRoot" aria-hidden="true">
+        <div class="modal-backdrop" data-modal-close></div>
+
+        <!-- 확인 미니 모달 -->
+        <div class="modal-panel modal-panel-sm" data-modal="confirm-action" role="dialog" aria-modal="true" aria-labelledby="modalConfirmTitle">
+            <div class="modal-head">
+                <div class="modal-title-wrap">
+                    <h3 class="modal-title" id="modalConfirmTitle">확인</h3>
+                    <p class="modal-subtitle" id="confirmMessage">정말 진행하시겠습니까?</p>
+                </div>
+                <button type="button" class="modal-close" data-modal-close aria-label="닫기">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M6 6L18 18" />
+                        <path d="M18 6L6 18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-foot confirm-foot">
+                <button type="button" class="modal-button secondary" id="confirmCancelBtn">취소</button>
+                <button type="button" class="modal-button danger" id="confirmOkBtn">삭제</button>
+            </div>
+        </div>
+
+        <!-- 기준 데이터 설정 -->
+        <div class="modal-panel modal-panel-lg" data-modal="settings-all" role="dialog" aria-modal="true" aria-labelledby="modalRewardTitle">
+            <div class="modal-head">
+                <div class="modal-title-wrap">
+                    <h3 class="modal-title" id="modalRewardTitle">데이터 설정</h3>
+                    <p class="modal-subtitle">개인화된 기준 데이터를 설정합니다</p>
+                </div>
+                <button type="button" class="modal-close" data-modal-close aria-label="닫기">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M6 6L18 18" />
+                        <path d="M18 6L6 18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="settings-section">
+                    <div class="settings-section-head">
+                        <div class="settings-section-title">기준 데이터</div>
+                        <!-- <div class="settings-section-desc">보상, 목표, 세금, 수수료 등 계산 기준값을 설정합니다</div> -->
+                    </div>
+                    <div class="modal-form-grid two-column">
+                        <label class="field">
+                            <span class="field-label">누적 보상 수량<span class="thin">(개)</span></span>
+                            <input type="text" id="rewardQtyInput" placeholder="예: 1234.56" inputmode="decimal">
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">목표 수량<span class="thin">(개)</span></span>
+                            <input type="text" id="targetQtyInput" placeholder="예: 40000" inputmode="decimal">
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">현재 단가<span class="thin">(원)</span></span>
+                            <input type="text" id="currentPriceInput" placeholder="예: 79.20" inputmode="decimal">
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">거래<span class="thin">(매수/매도)</span> 수수료율<span class="thin">(%)</span></span>
+                            <input type="text" id="feeRateInput" placeholder="예: 0.10" inputmode="decimal">
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">세율<span class="thin">(%)</span></span>
+                            <input type="text" id="taxRateInput" placeholder="예: 22" inputmode="decimal">
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">세금 공제액<span class="thin">(원)</span></span>
+                            <input type="text" id="taxDeductionInput" placeholder="예: 2500000" inputmode="decimal">
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">출금 수수료<span class="thin">(원)</span></span>
+                            <input type="text" id="withdrawFeeInput" placeholder="예: 1000" inputmode="decimal">
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">연 스테이킹 보상률<span class="thin">(%)</span></span>
+                            <input type="text" id="rewardRateInput" placeholder="예: 11" inputmode="decimal">
+                        </label>
+
+                        <div class="field">
+                            <label class="field-label" for="burnQtyInput">누적 소각 수량<span class="thin">(개)</span></label>
+                            <input type="text" id="burnQtyInput" placeholder="0.00">
+                        </div>
+
+                        <label class="field">
+                            <span class="field-label">기본 전송소각 수량<span class="thin">(개)</span></span>
+                            <input type="text" id="baseBurnQtyInput" placeholder="예: 0.10" inputmode="decimal">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-divider"></div>
+
+                <div class="settings-section">
+                    <div class="settings-section-head">
+                        <div class="settings-section-title">연동 데이터</div>
+                        <!-- <div class="settings-section-desc">시세 조회 API와 현재가 자동 갱신 옵션을 설정합니다</div> -->
+                    </div>
+
+                    <div class="modal-form-grid two-column">
+                        <label class="field">
+                            <span class="field-label">API 요청 URL</span>
+                            <input type="text" id="tickerApiUrlInput" placeholder="https://api.upbit.com/v1/ticker?markets=KRW-IOTA">
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">API Key</span>
+                            <input type="text" id="apiKeyInput" placeholder="API Key 입력">
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">가격 객체 Key</span>
+                            <input type="text" id="priceFieldKeyInput" placeholder="예: trade_price">
+                        </label>
+
+                        <div class="field full">
+                            <label class="switch-row" for="autoRefreshPriceInput">
+                                <span class="field-label">현재 단가 자동갱신<span class="thin">(매 60초)</span></span>
+                                <input type="checkbox" id="autoRefreshPriceInput" hidden>
+                                <span class="switch-ui"></span>
+                            </label>
+                        </div>
+
+                        <div class="field full">
+                            <label class="switch-row" for="riskModeInput">
+                                <span class="field-label">리스크 모드<span class="thin">(재난 및 지정학적 위험요소 발생)</span></span>
+                                <input type="checkbox" id="riskModeInput" hidden>
+                                <span class="switch-ui"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-foot">
+                <button type="button" class="modal-button red-button" id="resetBtn">초기화</button>
+                <button type="button" class="modal-button secondary" id="exportBtn">백업</button>
+                <button type="button" class="modal-button secondary" id="importBtn">복원</button>
+                <button type="button" class="modal-button primary" id="saveAllSettingsBtn">저장</button>
+            </div>
+        </div>
+
+        <!-- 매수기록 추가 -->
+        <div class="modal-panel" data-modal="buy-record" role="dialog" aria-modal="true" aria-labelledby="modalBuyTitle">
+            <div class="modal-head">
+                <div class="modal-title-wrap">
+                    <h3 class="modal-title" id="buyRecordModalTitle">암호화폐 추가</h3>
+                    <p class="modal-subtitle" id="buyRecordModalSubtitle">매수 기록을 등록하세요</p>
+                </div>
+                <button type="button" class="modal-close" data-modal-close aria-label="닫기">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M6 6L18 18" />
+                        <path d="M18 6L6 18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-form-grid two-column">
+                    <label class="field">
+                        <span class="field-label">날짜</span>
+                        <input type="date" id="date">
+                    </label>
+
+                    <label class="field">
+                        <span class="field-label">수량<span class="thin">(개)</span></span>
+                        <input type="text" id="quantity" placeholder="예: 500.25" inputmode="decimal">
+                    </label>
+
+                    <label class="field">
+                        <span class="field-label">단가<span class="thin">(원)</span></span>
+                        <input type="text" id="price" placeholder="예: 79.2" inputmode="decimal">
+                    </label>
+
+                    <label class="field full">
+                        <span class="field-label">매수금액<span class="thin">(원)</span></span>
+                        <input type="text" id="buyAmountDisplay" placeholder="자동 계산" disabled>
+                    </label>
+
+                    <label class="field full">
+                        <span class="field-label">메모</span>
+                        <textarea rows="4" id="memo" placeholder="예: 추가 진입"></textarea>
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-foot buy-record-modal-foot">
+                <button type="button" class="modal-button secondary" data-modal-close>취소</button>
+
+                <button type="button" class="modal-button danger" id="deleteTradeBtn" style="display:none;">
+                    삭제
+                </button>
+
+                <button type="button" class="modal-button primary" id="addBtn">추가</button>
+            </div>
+        </div>
+
+
+        <!-- 보상수량 추가 -->
+        <div class="modal-panel" data-modal="add-reward" role="dialog" aria-modal="true" aria-labelledby="modalAddRewardTitle">
+            <div class="modal-head">
+                <div class="modal-title-wrap">
+                    <h3 class="modal-title" id="modalAddRewardTitle">암호화폐 보상</h3>
+                    <p class="modal-subtitle">현재까지 받은 보상 수량을 확인하고 추가할 수 있습니다.</p>
+                </div>
+                <button type="button" class="modal-close" data-modal-close aria-label="닫기">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M6 6L18 18" />
+                        <path d="M18 6L6 18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-form-grid">
+                    <div class="field">
+                        <label class="field-label">현재까지 보상받은 수량</label>
+                        <input type="text" id="currentRewardQtyDisplay" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label class="field-label">추가할 보상 수량</label>
+                        <input type="text" id="addRewardQtyInput" placeholder="0.00">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-foot">
+                <button type="button" class="modal-button secondary" data-modal-close>취소</button>
+                <button type="button" class="modal-button primary" id="saveAddRewardBtn">추가</button>
+            </div>
+        </div>
+
+
+        <!-- 소각수량 추가 -->
+        <div class="modal-panel" data-modal="add-burn" role="dialog" aria-modal="true" aria-labelledby="modalAddBurnTitle">
+            <div class="modal-head">
+                <div class="modal-title-wrap">
+                    <h3 class="modal-title" id="modalAddBurnTitle">암호화폐 소각</h3>
+                    <p class="modal-subtitle">실제 보유 중인 암호화폐를 소각합니다</p>
+                </div>
+                <button type="button" class="modal-close" data-modal-close aria-label="닫기">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M6 6L18 18" />
+                        <path d="M18 6L6 18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-form-grid">
+                    <div class="field">
+                        <label class="field-label">보유한 수량<span class="thin">(개)</span></label>
+                        <input type="text" id="currentActualQtyDisplay" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label class="field-label">소각할 수량<span class="thin">(개)</span></label>
+                        <input type="text" id="addBurnQtyInput" placeholder="0.00">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-foot">
+                <button type="button" class="modal-button secondary" data-modal-close>취소</button>
+                <button type="button" class="modal-button primary red-button" id="saveAddBurnBtn">소각</button>
+            </div>
+        </div>
+
+
+        <!-- 참고자료 추가 -->
+        <div class="modal-panel" data-modal="add-news" role="dialog" aria-modal="true" aria-labelledby="modalAddNewsTitle">
+            <div class="modal-head">
+                <div class="modal-title-wrap">
+                    <h3 class="modal-title" id="modalAddNewsTitle">참고자료 추가</h3>
+                    <p class="modal-subtitle" id="modalAddNewsSubtitle">자주 사용되는 유용한 웹 페이지를 등록하세요</p>
+                </div>
+                <button type="button" class="modal-close" data-modal-close aria-label="닫기">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M6 6L18 18" />
+                        <path d="M18 6L6 18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-form-grid">
+                    <div class="field full">
+                        <label class="field-label" for="newsTitleInput">제목</label>
+                        <input type="text" id="newsTitleInput" placeholder="자료 제목">
+                    </div>
+
+                    <div class="field full">
+                        <label class="field-label" for="newsDescInput">설명</label>
+                        <textarea id="newsDescInput" placeholder="짧은 설명"></textarea>
+                    </div>
+
+                    <div class="field full">
+                        <label class="field-label" for="newsThumbnailInput">썸네일</label>
+                        <input type="text" id="newsThumbnailInput" placeholder="https://.">
+                    </div>
+
+                    <div class="field full">
+                        <label class="field-label" for="newsSourceInput">출처</label>
+                        <input type="text" id="newsSourceInput" placeholder="출처명">
+                    </div>
+
+                    <div class="field full">
+                        <label class="field-label" for="newsLinkInput">접속 주소</label>
+                        <input type="text" id="newsLinkInput" placeholder="https://.">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-foot news-modal-foot">
+                <button type="button" class="modal-button secondary" data-modal-close>취소</button>
+
+                <button type="button" class="modal-button danger" id="deleteNewsBtn" style="display:none;">
+                    삭제
+                </button>
+
+                <button type="button" class="modal-button primary" id="saveAddNewsBtn">추가</button>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <div class="page-loading active" id="pageLoading" aria-hidden="false">
+        <div class="page-loading-spinner"></div>
+    </div>
+
+    <script src="scripts/index.js"></script>
+</body>
+
+</html>
