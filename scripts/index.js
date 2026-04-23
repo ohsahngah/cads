@@ -1,7 +1,9 @@
 const STORAGE_KEY_TRADES = 'osca_trades';
 const STORAGE_KEY_SETTINGS = 'osca_settings';
 const STORAGE_KEY_NEWS = 'osca_news';
+const STORAGE_KEY_TASKS = 'osca_tasks';
 const DEFAULT_TICKER_API_URL = 'https://api.upbit.com/v1/ticker?markets=KRW-IOTA';
+const MAX_TASK_COUNT = 24;
 
 const mainTabs = document.querySelectorAll('.main-tabs li');
 const pages = document.querySelectorAll('.tab');
@@ -21,6 +23,9 @@ const nextPageButton = document.getElementById('nextPageButton');
 const lastPageButton = document.getElementById('lastPageButton');
 const sortButtons = document.querySelectorAll('.sort-button');
 const pageSizeSelect = document.getElementById('pageSizeSelect');
+
+const tasksList = document.getElementById('tasksList');
+const tasksEmpty = document.getElementById('tasksEmpty');
 
 function getDefaultNewsItems() {
     return [
@@ -51,12 +56,234 @@ function getDefaultNewsItems() {
     ];
 }
 
+function normalizeTask(task) {
+    return {
+        id: Number(task?.id || Date.now()),
+        status: String(task?.status || '대기').trim(),
+        content: String(task?.content || '').trim(),
+        createdAt: Number(task?.createdAt || Date.now()),
+        updatedAt: Number(task?.updatedAt || Date.now())
+    };
+}
+
+function loadTasks() {
+    const raw = localStorage.getItem(STORAGE_KEY_TASKS);
+    if (!raw) return [];
+
+    try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed.map(normalizeTask) : [];
+    } catch (err) {
+        return [];
+    }
+}
+
+function saveTasks(tasks) {
+    localStorage.setItem(
+        STORAGE_KEY_TASKS,
+        JSON.stringify(tasks.map(normalizeTask))
+    );
+}
+
+function getTaskStatusOrder(status) {
+    const order = {
+        '반복': 0,
+        '대기': 1,
+        '보류': 2,
+        '완료': 3,
+        '취소': 4
+    };
+
+    return order[status] ?? 99;
+}
+
+function getTaskStatusClass(status) {
+    if (status === '반복') return 'is-repeat';
+    if (status === '보류') return 'is-hold';
+    if (status === '완료') return 'is-done';
+    if (status === '취소') return 'is-cancelled';
+    return 'is-waiting';
+}
+
+function renderTasks() {
+    if (!tasksList || !tasksEmpty) return;
+
+    const tasks = loadTasks().sort((a, b) => {
+        const statusDiff = getTaskStatusOrder(a.status) - getTaskStatusOrder(b.status);
+        if (statusDiff !== 0) return statusDiff;
+        return Number(b.updatedAt || 0) - Number(a.updatedAt || 0);
+    });
+
+    if (!tasks.length) {
+        tasksList.innerHTML = '';
+        tasksEmpty.classList.add('active');
+        return;
+    }
+
+    tasksEmpty.classList.remove('active');
+
+    tasksList.innerHTML = tasks.map(task => `
+        <div class="task-item ${getTaskStatusClass(task.status)}" data-task-id="${task.id}">
+            <div class="task-status">${task.status}</div>
+            <div class="task-content" title="${task.content}">${task.content}</div>
+
+            <button type="button" class="task-edit-btn" data-task-edit-id="${task.id}" aria-label="업무 수정">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M4 20h4l10-10-4-4L4 16v4Z" />
+                    <path d="M13 7l4 4" />
+                </svg>
+            </button>
+        </div>
+    `).join('');
+}
+
+function clearTaskInputs() {
+    const statusInput = byId('taskStatusInput');
+    const contentInput = byId('taskContentInput');
+
+    const defaultRadio = document.querySelector(
+        'input[name="taskStatus"][value="대기"]'
+    );
+
+    if (defaultRadio) {
+        defaultRadio.checked = true;
+    }
+
+    if (contentInput) contentInput.value = '';
+}
+
+function resetTaskModalMode() {
+    state.editingTaskId = null;
+
+    const modalTitle = byId('modalTaskTitle');
+    const deleteButton = byId('deleteTaskBtn');
+
+    if (modalTitle) modalTitle.textContent = '업무 추가';
+    if (deleteButton) deleteButton.style.display = 'none';
+}
+
+function openAddTaskModal() {
+    resetTaskModalMode();
+    clearTaskInputs();
+    openModal('add-task');
+}
+
+function openEditTaskModal(taskId) {
+    const tasks = loadTasks();
+    const targetTask = tasks.find(task => Number(task.id) === Number(taskId));
+    if (!targetTask) return;
+
+    state.editingTaskId = Number(taskId);
+
+    const modalTitle = byId('modalTaskTitle');
+    const deleteButton = byId('deleteTaskBtn');
+
+    if (modalTitle) modalTitle.textContent = '업무 수정';
+    if (deleteButton) deleteButton.style.display = 'inline-flex';
+
+    const targetRadio = document.querySelector(
+        `input[name="taskStatus"][value="${targetTask.status}"]`
+    );
+
+    if (targetRadio) {
+        targetRadio.checked = true;
+    }
+
+    if (byId('taskContentInput')) byId('taskContentInput').value = targetTask.content || '';
+
+    openModal('add-task');
+}
+
+function getTaskFormValues() {
+    const checkedStatus = document.querySelector(
+        'input[name="taskStatus"]:checked'
+    );
+
+    return {
+        status: String(checkedStatus?.value || '대기').trim(),
+        content: String(byId('taskContentInput')?.value || '').trim()
+    };
+}
+
+function validateTaskForm({ content }) {
+    if (!content) {
+        alert('업무 내용을 입력해 주세요.');
+        return false;
+    }
+
+    return true;
+}
+
+function addTaskItem() {
+    const form = getTaskFormValues();
+    if (!validateTaskForm(form)) return;
+
+    const tasks = loadTasks();
+
+    if (tasks.length >= MAX_TASK_COUNT) {
+        alert(`업무는 최대 ${MAX_TASK_COUNT}개까지만 등록할 수 있습니다.`);
+        return;
+    }
+
+    tasks.unshift({
+        id: Date.now(),
+        status: form.status,
+        content: form.content,
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+    });
+
+    saveTasks(tasks);
+    renderTasks();
+    closeModal();
+}
+
+function updateTaskItem(taskId) {
+    const form = getTaskFormValues();
+    if (!validateTaskForm(form)) return;
+
+    const tasks = loadTasks();
+
+    const nextTasks = tasks.map(task => {
+        if (Number(task.id) !== Number(taskId)) return task;
+
+        return {
+            ...task,
+            status: form.status,
+            content: form.content,
+            updatedAt: Date.now()
+        };
+    });
+
+    saveTasks(nextTasks);
+    renderTasks();
+    closeModal();
+}
+
+function removeTaskItem(taskId) {
+    const tasks = loadTasks();
+    const nextTasks = tasks.filter(task => Number(task.id) !== Number(taskId));
+
+    saveTasks(nextTasks);
+    renderTasks();
+    closeModal();
+}
+
+function submitTaskItem() {
+    if (state.editingTaskId != null) {
+        updateTaskItem(state.editingTaskId);
+        return;
+    }
+
+    addTaskItem();
+}
+
 function normalizeNewsItem(item) {
     return {
         id: Number(item?.id || Date.now()),
         title: String(item?.title || '').trim(),
         description: String(item?.description || '').trim(),
-        thumbnail: String(item?.thumbnail || '').trim(),
+        thumbnail: String(item?.thumbnail || 'images/default.webp').trim(),
         source: String(item?.source || '').trim(),
         link: String(item?.link || '').trim()
     };
@@ -101,7 +328,14 @@ function renderNews() {
 
     newsList.innerHTML = newsItems.map(item => `
         <div class="news-card" data-news-id="${item.id}">
-            <a class="news-card-link" href="${item.link}" target="_blank" rel="noopener noreferrer">
+            ${item.link
+                ? `
+                <a class="news-card-link" href="${item.link}" target="_blank" rel="noopener noreferrer">
+                `
+                : `
+                <div class="news-card-link no-link">
+                `
+            }
                 <div class="news-thumb-wrap">
                     <img class="news-thumb" src="${item.thumbnail}" alt="${item.title}">
                 </div>
@@ -112,7 +346,7 @@ function renderNews() {
                         <span class="news-source">${item.source}</span>
                     </div>
                 </div>
-            </a>
+            ${item.link ? '</a>' : '</div>'}
 
             <div class="news-card-actions">
                 <button type="button" class="news-edit-btn" data-news-edit-id="${item.id}" aria-label="뉴스 수정">
@@ -148,18 +382,13 @@ function addNewsItem() {
         return;
     }
 
-    if (!link) {
-        alert('링크 주소를 입력해 주세요.');
-        return;
-    }
-
     const newsItems = loadNewsItems();
 
     newsItems.unshift({
         id: Date.now(),
         title,
         description,
-        thumbnail: thumbnail || 'https://via.placeholder.com/320x180',
+        thumbnail: thumbnail || 'images/default.webp',
         source,
         link
     });
@@ -210,11 +439,6 @@ function validateNewsForm({ title, description, source, link }) {
 
     if (!source) {
         alert('출처를 입력해 주세요.');
-        return false;
-    }
-
-    if (!link) {
-        alert('링크 주소를 입력해 주세요.');
         return false;
     }
 
@@ -282,7 +506,7 @@ function updateNewsItem(newsId) {
             ...item,
             title: form.title,
             description: form.description,
-            thumbnail: form.thumbnail || 'https://via.placeholder.com/320x180',
+            thumbnail: form.thumbnail || 'images/default.webp',
             source: form.source,
             link: form.link
         };
@@ -320,7 +544,8 @@ const state = {
     settings: null,
     confirmAction: null,
     editingNewsId: null,
-    editingTradeId: null
+    editingTradeId: null,
+    editingTaskId: null
 };
 
 function showPageLoading() {
@@ -879,6 +1104,7 @@ function render() {
     renderHistoryTable();
     renderApiStatus();
     renderNews();
+    renderTasks();
 }
 
 function resetBuyRecordModalMode() {
@@ -1062,6 +1288,10 @@ function closeModal() {
     if (activePanel?.dataset.modal === 'add-news') {
         clearNewsInputs();
         resetNewsModalMode();
+    }
+
+    if (activePanel?.dataset.modal === 'add-task') {
+        clearTaskInputs();
     }
 
     state.confirmAction = null;
@@ -1514,6 +1744,7 @@ function exportData() {
         trades: loadTrades(),
         settings: loadSettings(),
         news: loadNewsItems(),
+        tasks: loadTasks(),
         exportedAt: getNowDateTimeText()
     };
 
@@ -1576,17 +1807,25 @@ function importData() {
                 throw new Error('참고자료 데이터가 없습니다.');
             }
 
+            if (!Array.isArray(parsed.tasks)) {
+                throw new Error('업무 데이터가 없습니다.');
+            }
+
             // 정상 복원
             const nextTrades = parsed.trades.map(normalizeTrade);
             const nextSettings = normalizeSettings(parsed.settings);
             const nextNews = parsed.news.map(normalizeNewsItem);
+            const nextTasks = parsed.tasks.map(normalizeTask);
 
             saveTrades(nextTrades);
+
             saveSettings({
                 ...nextSettings,
                 apiStatusMessage: '백업 파일에서 복원되었습니다.'
             });
+
             saveNewsItems(nextNews);
+            saveTasks(nextTasks);
 
             if (nextSettings.autoRefreshPrice) {
                 startAutoPriceRefresh();
@@ -1616,6 +1855,7 @@ function resetTrades() {
         localStorage.removeItem(STORAGE_KEY_TRADES);
         localStorage.removeItem(STORAGE_KEY_SETTINGS);
         localStorage.removeItem(STORAGE_KEY_NEWS);
+        localStorage.removeItem(STORAGE_KEY_TASKS);
 
         stopAutoPriceRefresh();
         state.settings = null;
@@ -1860,7 +2100,7 @@ state.settings = normalizeSettings(loadSettings());
 render();
 fillAllSettingsInputs();
 
-const validTabs = ['dashboard', 'history', 'news'];
+const validTabs = ['dashboard', 'history', 'news', 'tasks'];
 const hashTab = location.hash ? location.hash.replace('#', '') : '';
 const initialTab = validTabs.includes(hashTab) ? hashTab : 'dashboard';
 
@@ -1889,3 +2129,37 @@ window.addEventListener('load', () => {
         stopAutoPriceRefresh();
     }
 });
+
+const addTaskTopBtn = byId('addTaskTopBtn');
+const saveTaskBtn = byId('saveTaskBtn');
+const deleteTaskBtn = byId('deleteTaskBtn');
+
+if (addTaskTopBtn) {
+    addTaskTopBtn.addEventListener('click', openAddTaskModal);
+}
+
+if (saveTaskBtn) {
+    saveTaskBtn.addEventListener('click', submitTaskItem);
+}
+
+if (deleteTaskBtn) {
+    deleteTaskBtn.addEventListener('click', () => {
+        if (state.editingTaskId == null) return;
+
+        openConfirmModal('이 업무를 삭제하시겠습니까?', () => {
+            removeTaskItem(state.editingTaskId);
+        }, {
+            confirmText: '삭제'
+        });
+    });
+}
+
+if (tasksList) {
+    tasksList.addEventListener('click', (event) => {
+        const editButton = event.target.closest('[data-task-edit-id]');
+        if (!editButton) return;
+
+        const taskId = Number(editButton.dataset.taskEditId);
+        openEditTaskModal(taskId);
+    });
+}
