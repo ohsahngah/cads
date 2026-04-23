@@ -26,6 +26,7 @@
                 <div class="end">
                     <ul class="main-tabs">
                         <li data-tab="news">참고</li>
+                        <li data-tab="tasks">업무</li>
                         <li data-tab="history">실행</li>
                         <li class="active" data-tab="dashboard">분석</li>
 
@@ -81,7 +82,19 @@
                                     <path d="M5 12H19" />
                                 </svg>
                             </span>
-                            <span>암호화폐</span>
+                            <span>추가</span>
+                        </li>
+                    </ul>
+
+                    <ul class="sub-actions" data-submenu="tasks">
+                        <li id="addTaskTopBtn">
+                            <span class="action-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 5V19" />
+                                    <path d="M5 12H19" />
+                                </svg>
+                            </span>
+                            <span>추가</span>
                         </li>
                     </ul>
 
@@ -93,7 +106,7 @@
                                     <path d="M5 12H19" />
                                 </svg>
                             </span>
-                            <span>참고자료</span>
+                            <span>추가</span>
                         </li>
                     </ul>
                 </div>
@@ -433,6 +446,18 @@
         <div class="tab" id="news">
             <div class="container">
                 <div class="news-list" id="newsList"></div>
+            </div>
+        </div>
+
+        <div class="tab" id="tasks">
+            <div class="container">
+                <div class="tasks-panel">
+                    <div class="tasks-empty" id="tasksEmpty">
+                        아직 등록된 업무가 없습니다.
+                    </div>
+
+                    <div class="tasks-list" id="tasksList"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -777,7 +802,67 @@
             </div>
         </div>
 
-        
+        <!-- 업무 -->
+        <div class="modal-panel" data-modal="add-task">
+            <div class="modal-head">
+                <div class="modal-title-wrap">
+                    <div class="modal-title" id="modalTaskTitle">업무 추가</div>
+                    <div class="modal-subtitle">업무 상태와 내용을 입력해 주세요</div>
+                </div>
+
+                <button type="button" class="modal-close" data-modal-close aria-label="닫기">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M6 6L18 18" />
+                        <path d="M18 6L6 18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-form-grid">
+                    <div class="field">
+                        <label class="field-label">상태</label>
+
+                        <div class="task-status-radio-group" id="taskStatusInput">
+                            <label class="task-status-radio">
+                                <input type="radio" name="taskStatus" value="대기" checked>
+                                <span>대기</span>
+                            </label>
+
+                            <label class="task-status-radio">
+                                <input type="radio" name="taskStatus" value="반복">
+                                <span>반복</span>
+                            </label>
+
+                            <label class="task-status-radio">
+                                <input type="radio" name="taskStatus" value="보류">
+                                <span>보류</span>
+                            </label>
+
+                            <label class="task-status-radio">
+                                <input type="radio" name="taskStatus" value="완료">
+                                <span>완료</span>
+                            </label>
+
+                            <label class="task-status-radio">
+                                <input type="radio" name="taskStatus" value="취소">
+                                <span>취소</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="field-label" for="taskContentInput">업무 내용</label>
+                        <input type="text" id="taskContentInput" placeholder="예: 스테이킹 보상 입력">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-foot">
+                <button type="button" class="modal-button danger" id="deleteTaskBtn" style="display:none;">삭제</button>
+                <button type="button" class="modal-button primary" id="saveTaskBtn">저장</button>
+            </div>
+        </div>
     </div>
 
     <div class="page-loading active" id="pageLoading" aria-hidden="false">
