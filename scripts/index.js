@@ -158,8 +158,9 @@ function resetTaskModalMode() {
     const modalTitle = byId('modalTaskTitle');
     const deleteButton = byId('deleteTaskBtn');
 
-    if (modalTitle) modalTitle.textContent = '업무 추가';
+    if (modalTitle) modalTitle.textContent = '업무 등록';
     if (deleteButton) deleteButton.style.display = 'none';
+    if (saveTaskBtn) saveTaskBtn.textContent = '등록';
 }
 
 function openAddTaskModal() {
@@ -180,6 +181,7 @@ function openEditTaskModal(taskId) {
 
     if (modalTitle) modalTitle.textContent = '업무 수정';
     if (deleteButton) deleteButton.style.display = 'inline-flex';
+    if (saveTaskBtn) saveTaskBtn.textContent = '수정';
 
     const targetRadio = document.querySelector(
         `input[name="taskStatus"][value="${targetTask.status}"]`
@@ -207,7 +209,7 @@ function getTaskFormValues() {
 
 function validateTaskForm({ content }) {
     if (!content) {
-        alert('업무 내용을 입력해 주세요.');
+        openAlertModal('업무 내용을 입력해 주세요.');
         return false;
     }
 
@@ -221,7 +223,7 @@ function addTaskItem() {
     const tasks = loadTasks();
 
     if (tasks.length >= MAX_TASK_COUNT) {
-        alert(`업무는 최대 ${MAX_TASK_COUNT}개까지만 등록할 수 있습니다.`);
+        openAlertModal(`업무는 최대 ${MAX_TASK_COUNT}개까지만 등록할 수 있습니다.`);
         return;
     }
 
@@ -368,17 +370,17 @@ function addNewsItem() {
     const link = String(byId('newsLinkInput')?.value || '').trim();
 
     if (!title) {
-        alert('뉴스 타이틀을 입력해 주세요.');
+        openAlertModal('뉴스 타이틀을 입력해 주세요.');
         return;
     }
 
     if (!description) {
-        alert('뉴스 설명을 입력해 주세요.');
+        openAlertModal('뉴스 설명을 입력해 주세요.');
         return;
     }
 
     if (!source) {
-        alert('출처를 입력해 주세요.');
+        openAlertModal('출처를 입력해 주세요.');
         return;
     }
 
@@ -428,17 +430,17 @@ function getNewsFormValues() {
 
 function validateNewsForm({ title, description, source, link }) {
     if (!title) {
-        alert('뉴스 타이틀을 입력해 주세요.');
+        openAlertModal('뉴스 타이틀을 입력해 주세요.');
         return false;
     }
 
     if (!description) {
-        alert('뉴스 설명을 입력해 주세요.');
+        openAlertModal('뉴스 설명을 입력해 주세요.');
         return false;
     }
 
     if (!source) {
-        alert('출처를 입력해 주세요.');
+        openAlertModal('출처를 입력해 주세요.');
         return false;
     }
 
@@ -453,9 +455,9 @@ function resetNewsModalMode() {
     const saveButton = byId('saveAddNewsBtn');
     const deleteButton = byId('deleteNewsBtn');
 
-    if (modalTitle) modalTitle.textContent = '참고자료 추가';
+    if (modalTitle) modalTitle.textContent = '참고자료 등록';
     if (modalSubtitle) modalSubtitle.textContent = '자주 사용되는 유용한 웹 페이지를 등록하세요';
-    if (saveButton) saveButton.textContent = '추가';
+    if (saveButton) saveButton.textContent = '등록';
     if (deleteButton) deleteButton.style.display = 'none';
 }
 
@@ -632,16 +634,35 @@ function formatGeneralNumberInput(value) {
     return Number(str).toLocaleString('ko-KR');
 }
 
-function getRecommendation(profitRate, riskMode) {
+function getRecommendation(profitRate, riskMode, isTargetReached) {
     const rate = Number(profitRate || 0);
 
     if (rate <= -40) return { text: '강매수', className: 'positive' };
     if (rate <= -20) return { text: '매수', className: 'positive' };
+
     if (rate < 20) {
-        return riskMode
-            ? { text: '관망', className: '' }
-            : { text: '매집', className: '' };
+        if (!riskMode) {
+            if (isTargetReached) {
+                return { text: '관망', className: 'warning' };
+            }
+
+            if (rate < 5) {
+                return { text: '약매수', className: 'positive' };
+            }
+
+            return { text: '관망', className: 'warning' };
+        }
+
+        if (isTargetReached) {
+            if (rate < 1) return { text: '관망', className: 'warning' };
+            return { text: '약매도', className: 'negative' };
+        }
+
+        if (rate < -1) return { text: '약매수', className: 'positive' };
+        if (rate < 1) return { text: '관망', className: 'warning' };
+        return { text: '약매도', className: 'negative' };
     }
+
     if (rate < 40) return { text: '매도', className: 'negative' };
     return { text: '강매도', className: 'negative' };
 }
@@ -828,7 +849,9 @@ function calculateSummary(trades, settings) {
 
     const profitAmount = round2(netValue - totalCost);
     const profitRate = totalCost > 0 ? round2((profitAmount / totalCost) * 100) : 0;
-    const recommendation = getRecommendation(profitRate, settings.riskMode);
+
+    const isTargetReached = targetQty > 0 && actualQty >= targetQty;
+    const recommendation = getRecommendation(profitRate, settings.riskMode, isTargetReached);
 
     const startDate = getEarliestTradeDate(trades);
     const investDays = calculateInvestDays(startDate);
@@ -961,10 +984,6 @@ function renderSummary() {
 
     if (actionTextEl) {
         let action = { ...summary.recommendation };
-
-        if (summary.progressRate >= 100 && action.text === '매집') {
-            action = { text: '관망', className: 'warning' };
-        }
 
         actionTextEl.textContent = action.text;
         actionTextEl.classList.remove('positive', 'negative', 'warning');
@@ -1115,9 +1134,9 @@ function resetBuyRecordModalMode() {
     const saveBtn = byId('addBtn');
     const deleteBtn = byId('deleteTradeBtn');
 
-    if (titleEl) titleEl.textContent = '암호화폐 추가';
+    if (titleEl) titleEl.textContent = '매수기록 등록';
     if (subtitleEl) subtitleEl.textContent = '매수 기록을 등록하세요';
-    if (saveBtn) saveBtn.textContent = '추가';
+    if (saveBtn) saveBtn.textContent = '등록';
     if (deleteBtn) deleteBtn.style.display = 'none';
 }
 
@@ -1154,7 +1173,7 @@ function openEditTradeModal(tradeId) {
     const saveBtn = byId('addBtn');
     const deleteBtn = byId('deleteTradeBtn');
 
-    if (titleEl) titleEl.textContent = '암호화폐 수정';
+    if (titleEl) titleEl.textContent = '매수기록 수정';
     if (subtitleEl) subtitleEl.textContent = '매수 기록을 수정할 수 있습니다';
     if (saveBtn) saveBtn.textContent = '수정';
     if (deleteBtn) deleteBtn.style.display = 'inline-flex';
@@ -1172,17 +1191,17 @@ function updateTrade() {
     const memo = String(byId('memo')?.value || '').trim();
 
     if (!date) {
-        alert('날짜를 입력해 주세요.');
+        openAlertModal('날짜를 입력해 주세요.');
         return;
     }
 
     if (quantity <= 0) {
-        alert('수량을 입력해 주세요.');
+        openAlertModal('수량을 입력해 주세요.');
         return;
     }
 
     if (price <= 0) {
-        alert('단가를 입력해 주세요.');
+        openAlertModal('단가를 입력해 주세요.');
         return;
     }
 
@@ -1272,6 +1291,11 @@ function closeModal() {
         panel.classList.remove('active');
     });
 
+    const confirmCancelBtn = byId('confirmCancelBtn');
+    if (confirmCancelBtn) {
+        confirmCancelBtn.style.display = 'inline-flex';
+    }
+
     if (activePanel?.dataset.modal === 'buy-record') {
         clearInputs(['date', 'quantity', 'price', 'buyAmountDisplay', 'memo']);
         resetBuyRecordModalMode();
@@ -1300,6 +1324,7 @@ function closeModal() {
 function openConfirmModal(message, onConfirm, options = {}) {
     const confirmMessage = byId('confirmMessage');
     const confirmOkBtn = byId('confirmOkBtn');
+    const confirmCancelBtn = byId('confirmCancelBtn');
 
     if (confirmMessage) {
         confirmMessage.textContent = message || '정말 진행하시겠습니까?';
@@ -1307,10 +1332,24 @@ function openConfirmModal(message, onConfirm, options = {}) {
 
     if (confirmOkBtn) {
         confirmOkBtn.textContent = options.confirmText || '확인';
+        confirmOkBtn.classList.toggle('danger', options.type === 'danger');
+        confirmOkBtn.classList.toggle('primary', options.type !== 'danger');
+    }
+
+    if (confirmCancelBtn) {
+        confirmCancelBtn.style.display = options.hideCancel ? 'none' : 'inline-flex';
     }
 
     state.confirmAction = typeof onConfirm === 'function' ? onConfirm : null;
     openModal('confirm-action');
+}
+
+function openAlertModal(message) {
+    openConfirmModal(message, null, {
+        confirmText: '확인',
+        hideCancel: true,
+        type: 'primary'
+    });
 }
 
 function runConfirmAction() {
@@ -1411,7 +1450,7 @@ function addRewardQty() {
     const addQty = parseFormattedNumber(byId('addRewardQtyInput')?.value);
 
     if (addQty <= 0) {
-        alert('추가할 보상 수량을 입력해 주세요.');
+        openAlertModal('추가할 보상 수량을 입력해 주세요.');
         return;
     }
 
@@ -1445,12 +1484,12 @@ function addBurnQty() {
     const addQty = parseFormattedNumber(byId('addBurnQtyInput')?.value);
 
     if (addQty <= 0) {
-        alert('추가할 소각 수량을 입력해 주세요.');
+        openAlertModal('추가할 소각 수량을 입력해 주세요.');
         return;
     }
 
     if (addQty > summary.actualQty) {
-        alert('소각 수량은 현재 실제 보유 수량을 초과할 수 없습니다.');
+        openAlertModal('소각 수량은 현재 실제 보유 수량을 초과할 수 없습니다.');
         return;
     }
 
@@ -1553,7 +1592,7 @@ function saveApiUrlOnly() {
 
     renderApiStatus();
     closeModal();
-    alert('API 설정이 저장되었습니다.');
+    openAlertModal('API 설정이 저장되었습니다.');
 }
 
 async function refreshCurrentPrice(options = {}) {
@@ -1580,12 +1619,12 @@ async function refreshCurrentPrice(options = {}) {
     const priceFieldKey = String(settings.priceFieldKey || '').trim();
 
     if (!apiUrl) {
-        alert('먼저 API 주소를 입력해 주세요.');
+        openAlertModal('먼저 API 주소를 입력해 주세요.');
         return;
     }
 
     if (!priceFieldKey) {
-        alert('가격 객체 키를 입력해 주세요.');
+        openAlertModal('가격 객체 키를 입력해 주세요.');
         return;
     }
 
@@ -1644,7 +1683,7 @@ async function refreshCurrentPrice(options = {}) {
         setApiStatus(`현재가 갱신 실패: ${err.message}`);
 
         if (!silent) {
-            alert('현재가를 불러오지 못했습니다. API 주소, 가격 객체 키, 브라우저 정책을 확인해 주세요.');
+            openAlertModal('현재가를 불러오지 못했습니다. API 주소, 가격 객체 키, 브라우저 정책을 확인해 주세요.');
         }
     } finally {
         const elapsed = Date.now() - spinnerStartedAt;
@@ -1700,17 +1739,17 @@ function addTrade() {
     const memo = String(byId('memo')?.value || '').trim();
 
     if (!date) {
-        alert('날짜를 입력해 주세요.');
+        openAlertModal('날짜를 입력해 주세요.');
         return;
     }
 
     if (quantity <= 0) {
-        alert('수량을 입력해 주세요.');
+        openAlertModal('수량을 입력해 주세요.');
         return;
     }
 
     if (price <= 0) {
-        alert('단가를 입력해 주세요.');
+        openAlertModal('단가를 입력해 주세요.');
         return;
     }
 
@@ -1839,10 +1878,10 @@ function importData() {
             fillApiInputs();
             closeModal();
 
-            alert('백업 파일을 복원했습니다.');
+            openAlertModal('백업 파일을 복원했습니다.');
         } catch (err) {
             console.error(err);
-            alert(err.message || '백업 파일을 불러오지 못했습니다.');
+            openAlertModal(err.message || '백업 파일을 불러오지 못했습니다.');
         }
     });
 
@@ -1979,12 +2018,14 @@ byId('addBtn')?.addEventListener('click', submitTrade);
 byId('deleteTradeBtn')?.addEventListener('click', () => {
     if (state.editingTradeId == null) return;
 
-    const ok = confirm('이 매수 기록을 삭제할까요?');
-    if (!ok) return;
-
-    removeTrade(state.editingTradeId);
-    closeModal();
-    render();
+    openConfirmModal('이 매수 기록을 삭제할까요?', () => {
+        removeTrade(state.editingTradeId);
+        closeModal();
+        render();
+    }, {
+        confirmText: '삭제',
+        type: 'danger'
+    });
 });
 
 byId('confirmCancelBtn')?.addEventListener('click', () => {
@@ -2021,11 +2062,13 @@ byId('saveAddNewsBtn')?.addEventListener('click', () => {
 byId('deleteNewsBtn')?.addEventListener('click', () => {
     if (state.editingNewsId == null) return;
 
-    const ok = confirm('이 참고자료를 삭제할까요?');
-    if (!ok) return;
-
-    removeNewsItem(state.editingNewsId);
-    closeModal();
+    openConfirmModal('이 참고자료를 삭제할까요?', () => {
+        removeNewsItem(state.editingNewsId);
+        closeModal();
+    }, {
+        confirmText: '삭제',
+        type: 'danger'
+    });
 });
 
 byId('newsList')?.addEventListener('click', event => {
@@ -2149,7 +2192,8 @@ if (deleteTaskBtn) {
         openConfirmModal('이 업무를 삭제하시겠습니까?', () => {
             removeTaskItem(state.editingTaskId);
         }, {
-            confirmText: '삭제'
+            confirmText: '삭제',
+            type: 'danger'
         });
     });
 }
