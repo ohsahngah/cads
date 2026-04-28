@@ -27,7 +27,7 @@
                     <ul class="main-tabs">
                         <li data-tab="news">참고</li>
                         <li data-tab="tasks">업무</li>
-                        <li data-tab="history">실행</li>
+                        <li data-tab="history">매수</li>
                         <li class="active" data-tab="dashboard">분석</li>
 
                         <li class="main-tab-settings" data-open-modal="settings-all">
@@ -82,7 +82,7 @@
                                     <path d="M5 12H19" />
                                 </svg>
                             </span>
-                            <span>추가</span>
+                            <span>등록</span>
                         </li>
                     </ul>
 
@@ -94,7 +94,7 @@
                                     <path d="M5 12H19" />
                                 </svg>
                             </span>
-                            <span>추가</span>
+                            <span>등록</span>
                         </li>
                     </ul>
 
@@ -106,7 +106,7 @@
                                     <path d="M5 12H19" />
                                 </svg>
                             </span>
-                            <span>추가</span>
+                            <span>등록</span>
                         </li>
                     </ul>
                 </div>
@@ -474,21 +474,24 @@
         <div class="modal-backdrop" data-modal-close></div>
 
         <!-- 확인 미니 모달 -->
-        <div class="modal-panel modal-panel-sm" data-modal="confirm-action" role="dialog" aria-modal="true" aria-labelledby="modalConfirmTitle">
-            <div class="modal-head">
-                <div class="modal-title-wrap">
-                    <h3 class="modal-title" id="modalConfirmTitle">확인</h3>
-                    <p class="modal-subtitle" id="confirmMessage">정말 진행하시겠습니까?</p>
-                </div>
-                <button type="button" class="modal-close" data-modal-close aria-label="닫기">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M6 6L18 18" />
-                        <path d="M18 6L6 18" />
-                    </svg>
-                </button>
+        <div class="modal-panel confirm-modal" data-modal="confirm-action" role="dialog" aria-modal="true" aria-labelledby="modalConfirmTitle">
+            <button type="button" class="confirm-close" data-modal-close aria-label="닫기">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M6 6L18 18" />
+                    <path d="M18 6L6 18" />
+                </svg>
+            </button>
+
+            <div class="confirm-icon">
+                !
             </div>
 
-            <div class="modal-foot confirm-foot">
+            <div class="confirm-content">
+                <h3 class="confirm-title" id="modalConfirmTitle">확인</h3>
+                <p class="confirm-message" id="confirmMessage">정말 진행하시겠습니까?</p>
+            </div>
+
+            <div class="confirm-actions">
                 <button type="button" class="modal-button secondary" id="confirmCancelBtn">취소</button>
                 <button type="button" class="modal-button danger" id="confirmOkBtn">삭제</button>
             </div>
@@ -623,7 +626,7 @@
         <div class="modal-panel" data-modal="buy-record" role="dialog" aria-modal="true" aria-labelledby="modalBuyTitle">
             <div class="modal-head">
                 <div class="modal-title-wrap">
-                    <h3 class="modal-title" id="buyRecordModalTitle">암호화폐 추가</h3>
+                    <h3 class="modal-title" id="buyRecordModalTitle">매수기록 등록</h3>
                     <p class="modal-subtitle" id="buyRecordModalSubtitle">매수 기록을 등록하세요</p>
                 </div>
                 <button type="button" class="modal-close" data-modal-close aria-label="닫기">
@@ -670,7 +673,7 @@
                     삭제
                 </button>
 
-                <button type="button" class="modal-button primary" id="addBtn">추가</button>
+                <button type="button" class="modal-button primary" id="addBtn">등록</button>
             </div>
         </div>
 
@@ -751,7 +754,7 @@
         <div class="modal-panel" data-modal="add-news" role="dialog" aria-modal="true" aria-labelledby="modalAddNewsTitle">
             <div class="modal-head">
                 <div class="modal-title-wrap">
-                    <h3 class="modal-title" id="modalAddNewsTitle">참고자료 추가</h3>
+                    <h3 class="modal-title" id="modalAddNewsTitle">참고자료 등록</h3>
                     <p class="modal-subtitle" id="modalAddNewsSubtitle">자주 사용되는 유용한 웹 페이지를 등록하세요</p>
                 </div>
                 <button type="button" class="modal-close" data-modal-close aria-label="닫기">
@@ -798,7 +801,7 @@
                     삭제
                 </button>
 
-                <button type="button" class="modal-button primary" id="saveAddNewsBtn">추가</button>
+                <button type="button" class="modal-button primary" id="saveAddNewsBtn">등록</button>
             </div>
         </div>
 
@@ -806,7 +809,7 @@
         <div class="modal-panel" data-modal="add-task">
             <div class="modal-head">
                 <div class="modal-title-wrap">
-                    <div class="modal-title" id="modalTaskTitle">업무 추가</div>
+                    <div class="modal-title" id="modalTaskTitle">업무 등록</div>
                     <div class="modal-subtitle">업무 상태와 내용을 입력해 주세요</div>
                 </div>
 
@@ -860,7 +863,7 @@
 
             <div class="modal-foot">
                 <button type="button" class="modal-button danger" id="deleteTaskBtn" style="display:none;">삭제</button>
-                <button type="button" class="modal-button primary" id="saveTaskBtn">저장</button>
+                <button type="button" class="modal-button primary" id="saveTaskBtn">등록</button>
             </div>
         </div>
     </div>
